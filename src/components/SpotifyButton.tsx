@@ -29,7 +29,7 @@ export default function SpotifyButton({
           variant === "secondary",
 
         // Bordered install-style button
-        "border border-neutral-700 text-white hover:bg-neutral-800":
+        "border border-neutral-700 text-neutral-400 hover:text-white hover:bg-neutral-800":
           variant === "outline",
 
         // Transparent / ghost nav buttons

@@ -11,6 +11,9 @@ export const usePrefetchDetailPage = () => {
       Artists: { key: 'artist', fn: getArtistById },
       Albums: { key: 'album', fn: getAlbumById },
       Playlists: { key: 'playlist', fn: getPlaylistById },
+      artist: { key: 'artist', fn: getArtistById },
+      album: { key: 'album', fn: getAlbumById },
+      playlist: { key: 'playlist', fn: getPlaylistById },
     };
 
     const entry = queryMap[tab];

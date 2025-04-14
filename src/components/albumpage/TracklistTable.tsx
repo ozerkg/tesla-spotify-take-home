@@ -42,12 +42,15 @@ const TrackListTable = ({ tracks }: TrackListTableProps) => {
         </thead>
         <tbody>
           {newTracks.map((track, index) => {
+            const random = (
+              Math.floor(Math.random() * (2_000_000 - 100_000 + 1)) + 100_000
+            ).toLocaleString();
             if (!track) return null;
             return (
               <tr key={track.id} className="hover:bg-neutral-900 group">
                 <td className="py-3">{index + 1}</td>
                 <td className="py-3">{track.name ? track.name : ""}</td>
-                <td className="py-3">1,598,209</td>
+                <td className="py-3">{random}</td>
                 <td className="text-right">
                   {savedTracksStatus && savedTracksStatus[index] ? (
                     <IoMdHeart className="text-green-500 cursor-pointer transition-colors" />

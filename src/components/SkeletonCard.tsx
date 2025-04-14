@@ -36,7 +36,6 @@ export function SkeletonCard({ type }: SkeletonCardProps) {
       {showText && (
         <div className={classNames("mt-2", { "text-center": isCircle })}>
           <div className="h-4 bg-neutral-600 rounded mx-auto mb-1" />
-          {/* <div className="h-3 bg-neutral-700 rounded w-1/2 mx-auto" /> */}
         </div>
       )}
     </div>

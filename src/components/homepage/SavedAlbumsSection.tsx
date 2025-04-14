@@ -21,14 +21,14 @@ const SavedAlbumsSection = () => {
     });
   };
 
-  if (error) {
-    return <>Error loading albums</>;
+  if (error || userAlbums?.length === 0) {
+    return;
   }
 
   return (
     <>
       <div className="flex items-center cursor-pointer">
-        <h2 className="px-2 font-bold">Recently Played</h2>
+        <h2 className="px-2 font-bold">Your Albums</h2>
         <span className="text-neutral-400 ml-2">
           <IoChevronForward />
         </span>

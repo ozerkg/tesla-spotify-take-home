@@ -1,6 +1,7 @@
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 import { IoChevronForward } from "react-icons/io5";
 import { Track } from "@spotify/web-api-ts-sdk";
+import { useSaveTrack, useUnsaveTrack } from "../../apis";
 
 interface ArtistTopTracksListProps {
   artistTopTracks: Track[];
@@ -11,6 +12,9 @@ const ArtistTopTracksList = ({
   artistTopTracks,
   savedTracksStatus,
 }: ArtistTopTracksListProps) => {
+  const saveTrack = useSaveTrack();
+  const unsaveTrack = useUnsaveTrack();
+
   return (
     <div className="w-full md:w-2/3">
       <div className="flex items-center mb-8 cursor-pointer">
@@ -36,12 +40,12 @@ const ArtistTopTracksList = ({
               {isSaved ? (
                 <IoMdHeart
                   className="text-green-500 cursor-pointer transition-colors"
-                  onClick={() => console.log(track.id)}
+                  onClick={() => unsaveTrack.mutate(track.id)}
                 />
               ) : (
                 <IoMdHeartEmpty
                   className="text-neutral-400 hover:text-white cursor-pointer transition-colors"
-                  onClick={() => console.log(track.id)}
+                  onClick={() => saveTrack.mutate(track.id)}
                 />
               )}
             </div>

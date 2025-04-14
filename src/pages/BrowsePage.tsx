@@ -19,7 +19,6 @@ const BrowsePage = () => {
             type={"category"}
             imageUrl={category.icons[0].url}
             title={category.name}
-            onClick={() => console.log("card clicked")}
             key={category.id}
           />
         );

@@ -3,9 +3,13 @@ import HorizontalScrollContainer from "../HorizontalScrollContainer";
 import Card from "../Card";
 import { useTopTracks } from "../../apis/tracks/useTracks";
 import { SkeletonCard } from "../SkeletonCard";
+import { useNavigate } from "react-router-dom";
+import { usePrefetchDetailPage } from "../../hooks/usePrefetchDetailPage";
 
 const TopTracksSection = () => {
   const { data: topTracks, isPending, error } = useTopTracks();
+  const navigate = useNavigate();
+  const prefetchQuery = usePrefetchDetailPage();
 
   if (error) {
     return <div>Error loading tracks</div>;
@@ -14,7 +18,7 @@ const TopTracksSection = () => {
   return (
     <>
       <div className="flex items-center cursor-pointer">
-        <h2 className="px-2 font-bold">Recently Played</h2>
+        <h2 className="px-2 font-bold">Your Top Tracks</h2>
         <span className="text-neutral-400 ml-2">
           <IoChevronForward />
         </span>
@@ -33,7 +37,10 @@ const TopTracksSection = () => {
                   }
                   title={track.name}
                   subtitle={track.artists[0].name}
-                  onClick={() => console.log("card clicked")}
+                  onClick={() => navigate(`/album/${track.album.id}`)}
+                  onMouseEnter={() => prefetchQuery("album", track.album.id)}
+                  onFocus={() => prefetchQuery("album", track.album.id)}
+                  onTouchStart={() => prefetchQuery("album", track.album.id)}
                   key={track.id}
                 />
               );

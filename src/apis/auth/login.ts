@@ -16,7 +16,7 @@ export async function redirectToSpotifyLogin() {
     redirect_uri,
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
-    scope: "user-read-private user-read-email user-top-read user-library-read playlist-read-private playlist-read-collaborative user-read-recently-played user-follow-read user-follow-modify",
+    scope: "user-read-private user-read-email user-top-read user-library-read playlist-read-private playlist-read-collaborative user-read-recently-played user-follow-read user-follow-modify user-library-modify",
   });
 
   window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;

@@ -2,12 +2,17 @@ import { IoChevronForward } from "react-icons/io5";
 import HorizontalScrollContainer from "../HorizontalScrollContainer";
 import Card, { CardType } from "../Card";
 import { Album } from "@spotify/web-api-ts-sdk";
+import { usePrefetchDetailPage } from "../../hooks/usePrefetchDetailPage";
+import { useNavigate } from "react-router-dom";
 
 interface ArtistAlbumsProps {
   data: Album[];
 }
 
 const ArtistAlbums = ({ data }: ArtistAlbumsProps) => {
+  const navigate = useNavigate();
+  const prefetchQuery = usePrefetchDetailPage();
+
   return (
     <div className="mt-8 mx-2">
       <div className="flex items-center cursor-pointer mx-2">
@@ -25,7 +30,10 @@ const ArtistAlbums = ({ data }: ArtistAlbumsProps) => {
               imageUrl={item.images[0].url ?? "/public/music_note.png"}
               title={item.name}
               subtitle={`${albumYear} * Album`}
-              onClick={() => console.log("card clicked")}
+              onClick={() => navigate(`/${item.type}/${item.id}`)}
+              onMouseEnter={() => prefetchQuery(item.type, item.id)}
+              onFocus={() => prefetchQuery(item.type, item.id)}
+              onTouchStart={() => prefetchQuery(item.type, item.id)}
               key={item.id}
             />
           );

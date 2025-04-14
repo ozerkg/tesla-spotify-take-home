@@ -16,8 +16,8 @@ const PlaylistsSection = () => {
     return <>Loading..</>;
   }
 
-  if (error) {
-    return <>Error getting your playlist</>;
+  if (error || userPlaylist.length === 0) {
+    return;
   }
 
   const handlePrefetch = (playlistId: string) => {
@@ -31,7 +31,7 @@ const PlaylistsSection = () => {
   return (
     <>
       <div className="flex items-center cursor-pointer">
-        <h2 className="px-2 font-bold">Recently Played</h2>
+        <h2 className="px-2 font-bold">Your Playlists</h2>
         <span className="text-neutral-400 ml-2">
           <IoChevronForward />
         </span>

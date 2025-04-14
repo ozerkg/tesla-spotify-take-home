@@ -2,6 +2,8 @@ import { IoChevronForward } from "react-icons/io5";
 import HorizontalScrollContainer from "../HorizontalScrollContainer";
 import Card from "../Card";
 import { useRecentlyPlayedTracks } from "../../apis/tracks/useTracks";
+import { useNavigate } from "react-router-dom";
+import { usePrefetchDetailPage } from "../../hooks/usePrefetchDetailPage";
 
 const RecentlyPlayedSection = () => {
   const {
@@ -10,12 +12,15 @@ const RecentlyPlayedSection = () => {
     error,
   } = useRecentlyPlayedTracks();
 
+  const navigate = useNavigate();
+  const prefetchQuery = usePrefetchDetailPage();
+
   if (isPending) {
     return <>Loading...</>;
   }
 
-  if (error) {
-    return <>Error fetching recently played tracks</>;
+  if (error || recentlyPlayedTracks.length === 0) {
+    return;
   }
 
   return (
@@ -36,12 +41,14 @@ const RecentlyPlayedSection = () => {
               }
               title={item.track.name}
               subtitle={item.track.album.name}
-              onClick={() => console.log("card clicked")}
+              onClick={() => navigate(`album/${item.track.album.id}`)}
+              onMouseEnter={() => prefetchQuery("album", item.track.album.id)}
+              onFocus={() => prefetchQuery("album", item.track.album.id)}
+              onTouchStart={() => prefetchQuery("album", item.track.album.id)}
               key={item.track.id}
             />
           );
         })}
-        <div></div>
       </HorizontalScrollContainer>
     </>
   );

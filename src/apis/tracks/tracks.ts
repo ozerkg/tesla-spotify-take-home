@@ -123,3 +123,58 @@ export const getUserSavedTracks = async (
     );
   }
 };
+
+export const saveTracks = async (trackIds: string[]): Promise<void> => {
+  try {
+    const response = await axiosInstance.put(
+      '/me/tracks',
+      { ids: trackIds },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Failed to save tracks');
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      sessionStorage.removeItem('spotify_access_token');
+      redirectToSpotifyLogin();
+    }
+
+    throw new Error(
+      axios.isAxiosError(error)
+        ? error.message || 'Failed to save tracks'
+        : 'Unexpected error saving tracks'
+    );
+  }
+};
+
+export const unsaveTracks = async (trackIds: string[]): Promise<void> => {
+  try {
+    const response = await axiosInstance.delete('/me/tracks', {
+      data: { ids: trackIds },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error('Failed to unsave tracks');
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      sessionStorage.removeItem('spotify_access_token');
+      redirectToSpotifyLogin();
+    }
+
+    throw new Error(
+      axios.isAxiosError(error)
+        ? error.message || 'Failed to unsave tracks'
+        : 'Unexpected error unsaving tracks'
+    );
+  }
+};
