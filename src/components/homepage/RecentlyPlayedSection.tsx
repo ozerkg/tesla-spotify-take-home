@@ -36,9 +36,7 @@ const RecentlyPlayedSection = () => {
           return (
             <Card
               type={"album"}
-              imageUrl={
-                item.track.album.images[0].url ?? "/public/music_note.png"
-              }
+              imageUrl={item.track.album.images[0].url ?? "/music_note.png"}
               title={item.track.name}
               subtitle={item.track.album.name}
               onClick={() => navigate(`album/${item.track.album.id}`)}

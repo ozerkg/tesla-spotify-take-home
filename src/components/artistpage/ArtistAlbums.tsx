@@ -27,7 +27,7 @@ const ArtistAlbums = ({ data }: ArtistAlbumsProps) => {
           return (
             <Card
               type={item.type as CardType}
-              imageUrl={item.images[0].url ?? "/public/music_note.png"}
+              imageUrl={item.images[0].url ?? "/music_note.png"}
               title={item.name}
               subtitle={`${albumYear} * Album`}
               onClick={() => navigate(`/${item.type}/${item.id}`)}

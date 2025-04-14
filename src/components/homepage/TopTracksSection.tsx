@@ -32,9 +32,7 @@ const TopTracksSection = () => {
               return (
                 <Card
                   type={"album"}
-                  imageUrl={
-                    track.album.images[0].url ?? "/public/music_note.png"
-                  }
+                  imageUrl={track.album.images[0].url ?? "/music_note.png"}
                   title={track.name}
                   subtitle={track.artists[0].name}
                   onClick={() => navigate(`/album/${track.album.id}`)}

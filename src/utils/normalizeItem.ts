@@ -22,7 +22,7 @@ export const normalizeItem = (item: SpotifyLibraryItem): NormalizedItem => {
     return {
       id: item.album.id,
       title: item.album.name,
-      imageUrl: item.album.images?.[0]?.url ?? "public/music_note.png",
+      imageUrl: item.album.images?.[0]?.url ?? "/music_note.png",
       type: item.album.type,
     };
   }
@@ -33,7 +33,7 @@ export const normalizeItem = (item: SpotifyLibraryItem): NormalizedItem => {
     return {
       id: item.id,
       title: item.name,
-      imageUrl: item.images?.[0]?.url ?? "public/music_note.png",
+      imageUrl: item.images?.[0]?.url ?? "/music_note.png",
       type: "episode",
     };
   }
@@ -42,7 +42,7 @@ export const normalizeItem = (item: SpotifyLibraryItem): NormalizedItem => {
   return {
     id: item.id,
     title: item.name,
-    imageUrl: item.images?.[0]?.url ?? "public/music_note.png",
+    imageUrl: item.images?.[0]?.url ?? "/music_note.png",
     type: item.type,
   };
 }

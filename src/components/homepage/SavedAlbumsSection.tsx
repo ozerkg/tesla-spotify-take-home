@@ -44,9 +44,7 @@ const SavedAlbumsSection = () => {
                 <Card
                   type={"album"}
                   key={item.album.id}
-                  imageUrl={
-                    item.album.images[0].url ?? "/public/music_note.png"
-                  }
+                  imageUrl={item.album.images[0].url ?? "/music_note.png"}
                   title={item.album.name}
                   subtitle={`${albumYear} * Album`}
                   onClick={() => navigate(`/album/${item.album.id}`)}

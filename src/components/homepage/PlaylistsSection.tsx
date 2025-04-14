@@ -41,7 +41,7 @@ const PlaylistsSection = () => {
           return (
             <Card
               type={"album"}
-              imageUrl={item?.images?.[0]?.url ?? "/public/music_note.png"}
+              imageUrl={item?.images?.[0]?.url ?? "/music_note.png"}
               title={item.name}
               subtitle={item.description}
               onClick={() => navigate(`/playlist/${item.id}`)}
