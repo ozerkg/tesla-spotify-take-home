@@ -25,9 +25,13 @@ export const useCheckIfTrackIsSaved = (
   trackIds: string[],
   enabled = true
 ) => {
-  return useQuery<boolean[]>({
-    queryKey: ["tracks", "savedStatus"],
-    queryFn: () => checkIfTrackIsSaved(trackIds),
+  const sortedIds = [...trackIds].sort(); 
+  return useQuery<Record<string, boolean>>({
+    queryKey: ["tracks", "savedStatus", sortedIds],
+    queryFn: async () => {
+      const statuses = await checkIfTrackIsSaved(sortedIds);
+      return Object.fromEntries(sortedIds.map((id, i) => [id, statuses[i]]));
+    },
     enabled: enabled && trackIds.length > 0,
     staleTime: 1000 * 60 * 5,
   });
@@ -39,7 +43,7 @@ export const useUserSavedTracks = (
   enabled = true
 ) => {
   return useQuery<Track[]>({
-    queryKey: ["userSavedTracks"],
+    queryKey: ["userSavedTracks", limit, offset],
     queryFn: () => getUserSavedTracks(limit, offset),
     enabled,
     staleTime: 1000 * 60 * 5,
@@ -51,14 +55,25 @@ export const useSaveTrack = () => {
 
   return useMutation({
     mutationFn: (trackId: string) => saveTracks([trackId]),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['tracks', 'savedStatus'],
+    onSuccess: (_data, trackId) => {
+      queryClient.setQueriesData<Record<string, boolean>>(
+        { queryKey: ['tracks', 'savedStatus'], exact: false },
+        (prev) => {
+          if (!prev) return prev;
+          return { ...prev, [trackId]: true };
+        }
+      );
+
+      queryClient.refetchQueries({
+        predicate: (query) =>
+          query.queryKey[0] === 'tracks' &&
+          query.queryKey[1] === 'savedStatus' &&
+          Array.isArray(query.queryKey[2]) &&
+          query.queryKey[2].includes(trackId),
       });
-      queryClient.invalidateQueries({
-        queryKey: ['userSavedTracks'],
-      });
-    }
+
+      queryClient.invalidateQueries({ queryKey: ['userSavedTracks'] });
+    },
   });
 };
 
@@ -67,13 +82,24 @@ export const useUnsaveTrack = () => {
 
   return useMutation({
     mutationFn: (trackId: string) => unsaveTracks([trackId]),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['tracks', 'savedStatus'],
+    onSuccess: (_data, trackId) => {
+      queryClient.setQueriesData<Record<string, boolean>>(
+        { queryKey: ['tracks', 'savedStatus'], exact: false },
+        (prev) => {
+          if (!prev) return prev;
+          return { ...prev, [trackId]: false };
+        }
+      );
+
+      queryClient.refetchQueries({
+        predicate: (query) =>
+          query.queryKey[0] === 'tracks' &&
+          query.queryKey[1] === 'savedStatus' &&
+          Array.isArray(query.queryKey[2]) &&
+          query.queryKey[2].includes(trackId),
       });
-      queryClient.invalidateQueries({
-        queryKey: ['userSavedTracks'],
-      });
+
+      queryClient.invalidateQueries({ queryKey: ['userSavedTracks'] });
     },
   });
 };

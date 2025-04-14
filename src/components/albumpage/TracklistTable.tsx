@@ -1,10 +1,15 @@
+import { useRef } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { TbDots } from "react-icons/tb";
 import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 
 import { SimplifiedTrack, Track, Episode } from "@spotify/web-api-ts-sdk";
-import { useCheckIfTrackIsSaved } from "../../apis/tracks/useTracks";
+import {
+  useCheckIfTrackIsSaved,
+  useSaveTrack,
+  useUnsaveTrack,
+} from "../../apis/tracks/useTracks";
 
 dayjs.extend(duration);
 
@@ -21,6 +26,20 @@ const msToMinSec = (ms: number) => {
 
 const TrackListTable = ({ tracks }: TrackListTableProps) => {
   const newTracks = tracks.filter((track) => track !== null);
+  const saveTrack = useSaveTrack();
+  const unsaveTrack = useUnsaveTrack();
+
+  const randomCountsRef = useRef<Record<string, string>>({});
+
+  const getOrGenerateCount = (trackId: string) => {
+    if (!randomCountsRef.current[trackId]) {
+      const random = (
+        Math.floor(Math.random() * (2_000_000 - 100_000 + 1)) + 100_000
+      ).toLocaleString();
+      randomCountsRef.current[trackId] = random;
+    }
+    return randomCountsRef.current[trackId];
+  };
 
   const { data: savedTracksStatus } = useCheckIfTrackIsSaved(
     newTracks.map((track) => track?.id).slice(0, 20),
@@ -42,9 +61,7 @@ const TrackListTable = ({ tracks }: TrackListTableProps) => {
         </thead>
         <tbody>
           {newTracks.map((track, index) => {
-            const random = (
-              Math.floor(Math.random() * (2_000_000 - 100_000 + 1)) + 100_000
-            ).toLocaleString();
+            const random = getOrGenerateCount(track.id);
             if (!track) return null;
             return (
               <tr key={track.id} className="hover:bg-neutral-900 group">
@@ -52,10 +69,16 @@ const TrackListTable = ({ tracks }: TrackListTableProps) => {
                 <td className="py-3">{track.name ? track.name : ""}</td>
                 <td className="py-3">{random}</td>
                 <td className="text-right">
-                  {savedTracksStatus && savedTracksStatus[index] ? (
-                    <IoMdHeart className="text-green-500 cursor-pointer transition-colors" />
+                  {savedTracksStatus && savedTracksStatus[track.id] ? (
+                    <IoMdHeart
+                      onClick={() => unsaveTrack.mutate(track.id)}
+                      className="text-green-500 cursor-pointer transition-colors"
+                    />
                   ) : (
-                    <IoMdHeartEmpty className="text-neutral-400 hover:text-white cursor-pointer transition-colors" />
+                    <IoMdHeartEmpty
+                      onClick={() => saveTrack.mutate(track.id)}
+                      className="text-neutral-400 hover:text-white cursor-pointer transition-colors"
+                    />
                   )}
                 </td>
                 <td>{msToMinSec(track.duration_ms)}</td>

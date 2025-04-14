@@ -5,7 +5,7 @@ import { useSaveTrack, useUnsaveTrack } from "../../apis";
 
 interface ArtistTopTracksListProps {
   artistTopTracks: Track[];
-  savedTracksStatus: boolean[] | undefined;
+  savedTracksStatus: Record<string, boolean> | undefined;
 }
 
 const ArtistTopTracksList = ({
@@ -24,8 +24,8 @@ const ArtistTopTracksList = ({
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-8">
-        {artistTopTracks.slice(0, 6).map((track, i) => {
-          const isSaved = savedTracksStatus?.[i];
+        {artistTopTracks.slice(0, 6).map((track) => {
+          const isSaved = savedTracksStatus?.[track.id] ?? false;
 
           return (
             <div key={track.id} className="flex items-center gap-4">
