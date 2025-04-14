@@ -32,7 +32,7 @@ const Navbar = () => {
         </div>
 
         <NavLinks />
-        <ProfileButton imgUrl={data?.images[0].url} />
+        <ProfileButton imgUrl={data?.images[0]?.url} />
       </div>
       <div className="sm:hidden px-4 py-2 border-t border-neutral-800 flex items-center gap-3">
         <Search mode="mobile" />
